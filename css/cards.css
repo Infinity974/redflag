@@ -1,0 +1,528 @@
+/* ==========================================================================
+   RedFlag — Système de cartes (refonte premium V3)
+   - Tags réservés en bandeau bas, JAMAIS sur le texte d'effet
+   - Cartes Crush opaques (plus de transparence)
+   - Lisibilité 100% (contraste, ombres, polices)
+   - Hiérarchie : Type → Valeur principale → Nom → Effet → Tags
+   ========================================================================== */
+
+.game-card {
+  position: relative;
+  width: calc(110px * var(--ui-scale));
+  height: calc(168px * var(--ui-scale));
+  border-radius: calc(12px * var(--ui-scale));
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: calc(5px * var(--ui-scale)) calc(5px * var(--ui-scale)) 0 calc(5px * var(--ui-scale));
+  font-family: var(--font-body);
+  color: var(--color-white);
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.25s ease,
+              filter 0.2s ease;
+  flex-shrink: 0;
+  user-select: none;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+.game-card:hover {
+  transform: translateY(-10px) scale(1.06);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+  z-index: 10;
+}
+
+/* ==========================================================================
+   En-tête : Type + Valeur (grosse)
+   ========================================================================== */
+
+.game-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-display);
+  gap: 4px;
+  min-height: 18px;
+}
+
+.game-card__type-badge {
+  font-size: calc(8px * var(--ui-scale));
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #ffffff;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 65%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.game-card__value {
+  font-size: calc(16px * var(--ui-scale));
+  font-weight: 900;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7), 0 0 6px rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
+  letter-spacing: -0.5px;
+}
+
+/* ==========================================================================
+   Emoji central (zone fixe)
+   ========================================================================== */
+
+.game-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-display);
+  gap: 4px;
+  height: calc(18px * var(--ui-scale));
+  flex-shrink: 0;
+}
+
+.game-card__emoji {
+  font-size: calc(28px * var(--ui-scale));
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+  line-height: 1;
+  height: calc(36px * var(--ui-scale));
+  flex-shrink: 0;
+}
+
+.game-card__title {
+  font-family: var(--font-display);
+  font-size: calc(8.5px * var(--ui-scale));
+  font-weight: 900;
+  text-align: center;
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 0 0 4px rgba(0, 0, 0, 0.5);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+  hyphens: auto;
+  height: calc(20px * var(--ui-scale));
+  flex-shrink: 0;
+}
+
+.game-card__description {
+  font-size: calc(7px * var(--ui-scale));
+  font-style: italic;
+  text-align: center;
+  line-height: 1.2;
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  padding: 1px 3px;
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+.game-card__description span {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.game-card__tags {
+  display: flex;
+  gap: 2px;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.65);
+  margin: 0 calc(-5px * var(--ui-scale));
+  padding: 2px 3px;
+  height: calc(14px * var(--ui-scale));
+  overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+.card-tag {
+  font-size: calc(7px * var(--ui-scale));
+  padding: 1px 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.95);
+  flex-shrink: 0;
+  max-width: 48%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ==========================================================================
+   Variantes par type — couleurs lisibles
+   ========================================================================== */
+
+.game-card--green {
+  background: linear-gradient(160deg, #2EB872 0%, #1A8050 50%, #0A4A36 100%);
+  border-color: rgba(57, 255, 106, 0.5);
+}
+
+.game-card--green .game-card__type-badge {
+  color: #4DFFA1;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.game-card--red {
+  background: linear-gradient(160deg, #C62828 0%, #8E1A1A 50%, #4A0E0E 100%);
+  border-color: rgba(255, 92, 92, 0.5);
+}
+
+.game-card--red .game-card__type-badge {
+  color: #FFB0B0;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.game-card--conditional {
+  background: linear-gradient(160deg, #B53A8C 0%, #7A2766 50%, #3F1336 100%);
+  border-color: var(--color-gold);
+}
+
+.game-card--conditional .game-card__type-badge {
+  color: var(--color-gold);
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.game-card--action {
+  background: linear-gradient(160deg, #2D8FBF 0%, #1A5C80 50%, #0E2E40 100%);
+  border-color: rgba(79, 195, 255, 0.5);
+}
+
+.game-card--action .game-card__type-badge {
+  color: #B8E5FF;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.game-card--draw {
+  background: linear-gradient(160deg, #B89020 0%, #876D14 50%, #4A3B0A 100%);
+  border-color: var(--color-red);
+}
+
+.game-card--draw .game-card__type-badge {
+  background: rgba(0, 0, 0, 0.85);
+  color: #FFD93D;
+}
+
+/* Bouclier — jaune éclatant pour bien le distinguer */
+.game-card--shield {
+  background: linear-gradient(160deg, #FFE65C 0%, #FFC929 50%, #C9A02D 100%);
+  border-color: var(--color-gold);
+  color: #2A0E4D;
+}
+
+.game-card--shield .game-card__type-badge {
+  background: rgba(42, 14, 77, 0.9);
+  color: #FFE65C;
+}
+
+.game-card--shield .game-card__title,
+.game-card--shield .game-card__description span {
+  color: #2A0E4D;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.game-card--shield .game-card__value {
+  color: #2A0E4D;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+/* ==========================================================================
+   CRUSH — opaque, plus de transparence !
+   ========================================================================== */
+
+.game-card--crush {
+  background: linear-gradient(135deg, #C53A87 0%, #8E2A6B 50%, #4A1640 100%);
+  border-color: var(--color-gold);
+  position: relative;
+}
+
+.game-card--crush::after {
+  content: '💕';
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 12px;
+  z-index: 3;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.6));
+}
+
+.game-card--crush .game-card__type-badge {
+  background: var(--color-gold);
+  color: #2A0E4D;
+  font-weight: 900;
+}
+
+/* Joker = effet arc-en-ciel subtil */
+.game-card--crush[data-joker="true"] {
+  background: linear-gradient(135deg, #B53A8C 0%, #5A3CB5 50%, #2DBFBF 100%);
+  border-width: 3px;
+  animation: joker-rainbow 4s ease-in-out infinite;
+}
+
+@keyframes joker-rainbow {
+  0%, 100% { border-color: var(--color-gold); }
+  33% { border-color: var(--color-pink); }
+  66% { border-color: var(--color-cyan); }
+}
+
+/* ==========================================================================
+   NOPE & SKIP
+   ========================================================================== */
+
+.game-card--nope {
+  background: linear-gradient(160deg, #E63946 0%, #8B1F2A 50%, #3F0A11 100%);
+  border-color: #FFD93D;
+  border-width: 3px;
+}
+
+.game-card--nope .game-card__type-badge {
+  background: #FFD93D;
+  color: #2A0E4D;
+}
+
+.game-card--skip {
+  background: linear-gradient(160deg, #4FC3FF 0%, #2080CC 50%, #0E3D5C 100%);
+  border-color: rgba(var(--gold-rgb), 0.7);
+}
+
+.game-card--skip .game-card__type-badge {
+  background: rgba(0, 0, 0, 0.85);
+  color: #B8E5FF;
+}
+
+/* ==========================================================================
+   États tactiques
+   ========================================================================== */
+
+.game-card__activable-hint,
+.game-card__counter-hint,
+.game-card__combo-hint {
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-gold);
+  color: #2A0E4D;
+  font-family: var(--font-display);
+  font-size: 7px;
+  font-weight: 900;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  box-shadow: 0 0 8px var(--color-gold);
+  z-index: 5;            /* relatif au stacking context de la carte parente */
+  letter-spacing: 0.3px;
+  pointer-events: none;
+}
+
+/* ✅ Les cartes avec un badge hint ont un z-index légèrement plus haut
+   pour que leur badge sorte au-dessus des cartes voisines */
+.game-card--in-hand:has(.game-card__activable-hint),
+.game-card--in-hand:has(.game-card__counter-hint),
+.game-card--in-hand:has(.game-card__combo-hint) {
+  z-index: 8;
+}
+
+.game-card__counter-hint {
+  background: var(--color-green);
+  box-shadow: 0 0 12px var(--color-green);
+}
+
+.game-card__combo-hint {
+  background: linear-gradient(90deg, var(--color-pink), var(--color-gold));
+  color: #ffffff;
+}
+
+.game-card--counter-available {
+  border-color: var(--color-green);
+  border-width: 3px;
+}
+
+.game-card--activable {
+  border-color: var(--color-gold);
+  border-width: 3px;
+}
+
+.game-card--combo-selected {
+  border-color: var(--color-pink);
+  border-width: 3px;
+  box-shadow: 0 0 0 3px var(--color-gold), 0 0 24px var(--color-pink);
+  transform: translateY(-12px) scale(1.05);
+}
+
+.game-card--double-crit .game-card__activable-hint {
+  background: linear-gradient(90deg, var(--color-gold), var(--color-pink));
+  color: #ffffff;
+}
+
+.game-card--locked {
+  filter: grayscale(0.7) brightness(0.6);
+  cursor: not-allowed;
+}
+
+.game-card--locked:hover {
+  transform: none;
+}
+
+/* ==========================================================================
+   Card backs (dos) — pour combo x2 reveal
+   ========================================================================== */
+
+.card-back {
+  width: 50px;
+  height: 72px;
+  background: linear-gradient(135deg, var(--color-pink) 0%, var(--color-purple-accent) 100%);
+  border-radius: 8px;
+  border: 2px solid var(--color-gold);
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.card-back::after {
+  content: '♥';
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.card-back:hover {
+  transform: translateY(-6px) rotate(-2deg);
+  box-shadow: 0 8px 16px rgba(var(--primary-rgb), 0.4);
+}
+
+.card-back-stack {
+  display: inline-block;
+  width: 22px;
+  height: 30px;
+  background: linear-gradient(135deg, var(--color-pink) 0%, var(--color-purple-accent) 100%);
+  border-radius: 4px;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  position: relative;
+  box-shadow: 2px 2px 0 -1px var(--color-pink-dark),
+              4px 4px 0 -2px var(--color-purple-accent);
+}
+
+.card-back-stack::after {
+  content: '♥';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+}
+
+/* ==========================================================================
+   Animation de carte jouée (vol vers cible)
+   ========================================================================== */
+
+.card-animation-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 800;
+}
+
+.card-anim {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0) rotate(-180deg);
+  opacity: 0;
+  transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s;
+  z-index: 801;
+}
+
+.card-anim .game-card {
+  width: 200px;
+  height: 290px;
+  transform: none !important;
+  cursor: default;
+  grid-template-rows: 26px 80px 32px 1fr 22px;
+}
+
+.card-anim .game-card__title { font-size: 14px; }
+.card-anim .game-card__emoji { font-size: 64px; }
+.card-anim .game-card__description { font-size: 11px; }
+.card-anim .game-card__value { font-size: 22px; }
+.card-anim .game-card__type-badge { font-size: 11px; padding: 3px 8px; }
+.card-anim .card-tag { font-size: 9px; padding: 2px 6px; }
+
+.card-anim--reveal {
+  transform: translate(-50%, -50%) scale(1) rotate(0deg);
+  opacity: 1;
+  filter: drop-shadow(0 12px 32px rgba(var(--primary-rgb), 0.7));
+}
+
+.card-anim--fly {
+  --fly-dx: 0;
+  --fly-dy: 0;
+  transform: translate(calc(-50% + var(--fly-dx)), calc(-50% + var(--fly-dy))) scale(0.3);
+  opacity: 0;
+  transition: transform 0.45s cubic-bezier(0.45, 0.05, 0.55, 0.95), opacity 0.4s 0.15s;
+}
+
+/* Mode fluide : transitions plus rapides et plus simples */
+.card-anim--simple {
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out !important;
+}
+.card-anim--simple.card-anim--reveal {
+  filter: none;
+}
+.card-anim--simple.card-anim--fly {
+  transition: transform 0.25s ease-in, opacity 0.25s ease-in !important;
+}
+
+/* ==========================================================================
+   Bouton infos sur carte (long-press / hover)
+   ========================================================================== */
+
+.card-info-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.7);
+  color: var(--color-white);
+  font-size: 10px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: help;
+  z-index: 4;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  font-family: serif;
+}
+
+.card-info-btn:hover {
+  background: var(--color-gold);
+  color: #2A0E4D;
+}

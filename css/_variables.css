@@ -1,0 +1,151 @@
+/* ==========================================================================
+   RedFlag — Variables Globales V6
+   Source de vérité du design. Système de 4 thèmes + modes clair/fluide.
+   ========================================================================== */
+
+:root {
+  /* ---- VARIABLES THÈME (modifiées par data-theme) ---- */
+  /* Format RGB pour permettre rgba() avec transparence */
+
+  /* DEFAULT — Y2K Dating App Trash (rose/violet/or) */
+  --primary-rgb: 255, 79, 163;       /* Rose principal */
+  --secondary-rgb: 155, 79, 255;     /* Violet accent */
+  --accent-rgb: 79, 195, 255;        /* Cyan accent */
+  --gold-rgb: 255, 217, 61;          /* Or */
+  --success-rgb: 57, 255, 106;       /* Vert */
+  --danger-rgb: 230, 57, 70;         /* Rouge */
+
+  /* ---- Fonds ---- */
+  --bg-base: #0A0612;       /* Noir-violet de base */
+  --bg-deep: #050308;       /* Plus profond */
+  --bg-elevated: #1A0F2E;   /* Surfaces relevées */
+  --bg-card: #2A1748;       /* Surfaces cartes */
+
+  /* ---- Couleurs sémantiques calculées ---- */
+  --color-pink: rgb(var(--primary-rgb));
+  --color-pink-light: rgba(var(--primary-rgb), 0.85);
+  --color-pink-dark: rgba(var(--primary-rgb), 1);
+  --color-red: rgb(var(--danger-rgb));
+  --color-red-dark: rgba(var(--danger-rgb), 0.5);
+  --color-red-light: rgba(var(--danger-rgb), 0.85);
+  --color-green: rgb(var(--success-rgb));
+  --color-green-dark: rgba(var(--success-rgb), 0.5);
+  --color-purple-accent: rgb(var(--secondary-rgb));
+  --color-gold: rgb(var(--gold-rgb));
+  --color-gold-dark: rgba(var(--gold-rgb), 0.7);
+  --color-cyan: rgb(var(--accent-rgb));
+
+  /* ---- Aliases ---- */
+  --color-bg-base: var(--bg-base);
+  --color-bg-deep: var(--bg-deep);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-bg-card: var(--bg-card);
+  --color-purple-night: var(--bg-base);
+  --color-purple-deep: var(--bg-deep);
+  --color-purple-mid: var(--bg-elevated);
+
+  --color-white: #FFFFFF;
+  --color-white-soft: rgba(255, 255, 255, 0.85);
+  --color-white-muted: rgba(255, 255, 255, 0.6);
+  --color-white-subtle: rgba(255, 255, 255, 0.15);
+
+  /* ---- Typographie ---- */
+  --font-display: 'Bungee', 'Arial Black', sans-serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --fs-xs: 11px;
+  --fs-sm: 13px;
+  --fs-md: 15px;
+  --fs-lg: 18px;
+  --fs-xl: 24px;
+  --fs-2xl: 32px;
+  --fs-3xl: 48px;
+  --fs-display: 64px;
+
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-bold: 700;
+  --fw-black: 900;
+
+  /* ---- Espacements ---- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* ---- Border radius ---- */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  /* ---- Ombres et glows ---- */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+
+  --glow-pink: 0 0 24px rgba(var(--primary-rgb), 0.6);
+  --glow-gold: 0 0 32px rgba(var(--gold-rgb), 0.7);
+  --glow-green: 0 0 20px rgba(var(--success-rgb), 0.5);
+  --glow-red: 0 0 20px rgba(var(--danger-rgb), 0.5);
+
+  /* ---- Transitions ---- */
+  --transition-fast: 150ms ease-out;
+  --transition-base: 250ms ease-out;
+  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ---- Layout ---- */
+  --max-width-mobile: 768px;
+  --landscape-min-height: 360px;
+
+  /* ---- Notch settings ---- */
+  --notch-h: 56px;
+}
+
+/* ==========================================================================
+   THÈMES ALTERNATIFS
+   ========================================================================== */
+
+/* SYNTHWAVE — Néon rétro années 80 (cyan/magenta) */
+[data-theme="synthwave"] {
+  --primary-rgb: 255, 0, 200;        /* Magenta vif */
+  --secondary-rgb: 0, 240, 255;      /* Cyan néon */
+  --accent-rgb: 138, 43, 226;        /* Violet électrique */
+  --gold-rgb: 255, 230, 100;         /* Or doux */
+  --bg-base: #0D0524;                /* Bleu-violet profond */
+  --bg-deep: #050018;
+  --bg-elevated: #1F0E3A;
+  --bg-card: #2E1659;
+}
+
+/* CYBERPUNK — Néon futur (cyan/violet/rose) */
+[data-theme="cyberpunk"] {
+  --primary-rgb: 0, 240, 255;        /* Cyan néon */
+  --secondary-rgb: 168, 85, 247;     /* Violet futuriste */
+  --accent-rgb: 255, 79, 163;        /* Rose accent */
+  --gold-rgb: 250, 204, 21;          /* Or vif */
+  --bg-base: #03060F;                /* Quasi-noir bleu */
+  --bg-deep: #010204;
+  --bg-elevated: #0E1A2E;
+  --bg-card: #1A2A4A;
+}
+
+/* LOVE STORY — Pastel romance (rose tendre/lavande/pêche) */
+[data-theme="love"] {
+  --primary-rgb: 255, 105, 180;      /* Rose tendre */
+  --secondary-rgb: 200, 130, 255;    /* Lavande */
+  --accent-rgb: 255, 170, 130;       /* Pêche */
+  --gold-rgb: 255, 215, 145;         /* Or doux */
+  --bg-base: #1C0817;                /* Brun rosé profond */
+  --bg-deep: #11040E;
+  --bg-elevated: #2C0E25;
+  --bg-card: #3F1535;
+}

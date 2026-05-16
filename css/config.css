@@ -1,0 +1,368 @@
+/* ==========================================================================
+   RedFlag — Config screen (configuration de la partie)
+   ========================================================================== */
+
+.config-screen {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-4);
+  gap: var(--space-4);
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+/* ---- Header ---- */
+.config-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.config-header__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  color: var(--color-white);
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+/* ---- Bandeau lecture seule ---- */
+.config-readonly-banner {
+  background: linear-gradient(90deg,
+    rgba(255, 79, 163, 0.18) 0%,
+    rgba(155, 79, 255, 0.18) 100%);
+  border: 2px solid rgba(255, 79, 163, 0.5);
+  border-radius: 12px;
+  padding: 12px 20px;
+  text-align: center;
+  font-weight: 700;
+  color: var(--color-pink-light, #FFB0DD);
+  margin-bottom: var(--space-3);
+  width: 100%;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ---- Main ---- */
+.config-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  flex: 1;
+}
+
+.config-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.config-section__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  color: var(--color-white);
+  margin: 0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ==========================================================================
+   Modes de jeu (grille avec mode actif plus grand)
+   ========================================================================== */
+
+.game-modes-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: var(--space-3);
+  align-items: stretch;
+}
+
+@media (max-width: 700px) {
+  .game-modes-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.game-mode-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  padding: var(--space-4);
+  border-radius: 20px;
+  background: linear-gradient(160deg,
+    rgba(155, 79, 255, 0.15) 0%,
+    rgba(255, 79, 163, 0.08) 100%);
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+  transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s, background 0.25s;
+  font-family: inherit;
+  color: var(--color-white);
+  overflow: hidden;
+  min-height: 200px;
+}
+
+.game-mode-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 0%, rgba(255, 79, 163, 0.15), transparent 60%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+
+.game-mode-card:hover:not(:disabled)::before {
+  opacity: 1;
+}
+
+.game-mode-card:hover:not(:disabled) {
+  transform: translateY(-4px);
+  border-color: rgba(255, 79, 163, 0.5);
+  box-shadow: 0 8px 24px rgba(255, 79, 163, 0.2);
+}
+
+.game-mode-card--featured {
+  background: linear-gradient(160deg,
+    rgba(255, 79, 163, 0.25) 0%,
+    rgba(155, 79, 255, 0.18) 100%);
+  border-color: rgba(255, 79, 163, 0.4);
+  min-height: 280px;
+}
+
+.game-mode-card--featured .game-mode-card__icon {
+  font-size: 5rem;
+}
+
+.game-mode-card--featured .game-mode-card__title {
+  font-size: 2rem;
+}
+
+.game-mode-card--selected {
+  border-color: var(--color-gold) !important;
+  box-shadow: 0 0 0 3px rgba(var(--gold-rgb), 0.3),
+              0 8px 32px rgba(var(--gold-rgb), 0.25) !important;
+  background: linear-gradient(160deg,
+    rgba(255, 79, 163, 0.3) 0%,
+    rgba(255, 215, 0, 0.15) 100%) !important;
+}
+
+.game-mode-card--selected::after {
+  content: '✓';
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-gold);
+  color: #2A0E4D;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 18px;
+  box-shadow: 0 4px 12px rgba(var(--gold-rgb), 0.5);
+}
+
+.game-mode-card--locked {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.game-mode-card--locked:hover {
+  transform: none;
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: none;
+}
+
+.game-mode-card__badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--color-white);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.game-mode-card--featured .game-mode-card__badge {
+  background: linear-gradient(90deg, #66BB6A, #43A047);
+  border-color: transparent;
+}
+
+.game-mode-card--locked .game-mode-card__badge {
+  background: rgba(120, 120, 140, 0.5);
+}
+
+.game-mode-card__icon {
+  font-size: 3rem;
+  line-height: 1;
+  margin-top: 24px;
+  margin-bottom: 8px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+.game-mode-card__title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  margin: 0 0 8px 0;
+  letter-spacing: 1px;
+  color: var(--color-white);
+}
+
+.game-mode-card__desc {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0 0 12px 0;
+  flex: 1;
+}
+
+.game-mode-card__meta {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  margin-top: auto;
+}
+
+.game-mode-card--readonly {
+  cursor: default;
+  opacity: 0.85;
+}
+.game-mode-card--readonly:hover:not(:disabled) {
+  transform: none;
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: none;
+}
+
+/* ==========================================================================
+   Options avancées
+   ========================================================================== */
+
+.config-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.config-option {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.config-option__label {
+  font-weight: 700;
+  color: var(--color-white);
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
+}
+
+.config-option__choices {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.config-choice {
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-white);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+  min-width: 80px;
+}
+
+.config-choice:hover:not(:disabled):not(.config-choice--readonly) {
+  background: rgba(255, 79, 163, 0.2);
+  border-color: rgba(255, 79, 163, 0.6);
+  transform: translateY(-1px);
+}
+
+.config-choice--active {
+  background: linear-gradient(135deg,
+    rgba(255, 79, 163, 0.4),
+    rgba(155, 79, 255, 0.4));
+  border-color: var(--color-pink) !important;
+  box-shadow: 0 0 12px rgba(var(--primary-rgb), 0.4);
+}
+
+.config-choice--readonly {
+  cursor: default;
+  opacity: 0.8;
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.config-footer {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--space-3) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.config-footer__buttons {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.config-footer__buttons .btn {
+  flex: 1;
+  min-width: 200px;
+}
+
+.config-footer__hint {
+  text-align: center;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+/* ==========================================================================
+   Mode fluide
+   ========================================================================== */
+
+body.low-end-mode .game-mode-card,
+body.low-end-mode .game-mode-card::before,
+body.low-end-mode .config-choice,
+body.low-end-mode .player-card {
+  transition: none !important;
+  animation: none !important;
+}
+
+body.low-end-mode .game-mode-card:hover:not(:disabled) {
+  transform: none;
+  box-shadow: none;
+}

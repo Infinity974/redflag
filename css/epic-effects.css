@@ -1,0 +1,495 @@
+/* ==========================================================================
+   RedFlag — Effets visuels épiques
+   ========================================================================== */
+
+/* === Conteneur d'effet central === */
+.epic-effect {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 9999;
+  animation: epicEffectIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.epic-effect--exit {
+  animation: epicEffectOut 0.4s ease-in forwards;
+}
+
+@keyframes epicEffectIn {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes epicEffectOut {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(1.3); }
+}
+
+/* === Glow background === */
+.epic-effect__glow {
+  position: absolute;
+  inset: -50%;
+  background: radial-gradient(circle at center, var(--epic-glow-color, rgba(255, 79, 163, 0.6)) 0%, transparent 60%);
+  filter: blur(40px);
+  animation: epicGlowPulse 1s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes epicGlowPulse {
+  from { opacity: 0.6; transform: scale(1); }
+  to { opacity: 1; transform: scale(1.15); }
+}
+
+/* === Contenu central === */
+.epic-effect__content {
+  position: relative;
+  text-align: center;
+  font-family: var(--font-display, 'Bungee', sans-serif);
+  text-transform: uppercase;
+  z-index: 2;
+  filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.6));
+}
+
+.epic-effect__icon {
+  font-size: 5rem;
+  line-height: 1;
+  margin-bottom: 8px;
+  animation: epicIconBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: drop-shadow(0 0 20px var(--epic-glow-color, rgba(255, 79, 163, 0.8)));
+}
+
+@keyframes epicIconBounce {
+  0%   { transform: scale(0) rotate(-30deg); }
+  60%  { transform: scale(1.4) rotate(8deg); }
+  80%  { transform: scale(0.9) rotate(-3deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.epic-effect__title {
+  font-size: 3rem;
+  font-weight: 900;
+  letter-spacing: 4px;
+  color: var(--epic-text-color, #FFFFFF);
+  -webkit-text-stroke: 2px rgba(0, 0, 0, 0.3);
+  text-shadow:
+    0 0 20px var(--epic-glow-color, rgba(255, 79, 163, 1)),
+    0 0 40px var(--epic-glow-color, rgba(255, 79, 163, 0.6)),
+    0 4px 8px rgba(0, 0, 0, 0.6);
+  animation: epicTitleSlam 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes epicTitleSlam {
+  from { transform: translateY(-30px) scale(1.6); opacity: 0; letter-spacing: 20px; }
+  to   { transform: translateY(0) scale(1); opacity: 1; letter-spacing: 4px; }
+}
+
+.epic-effect__value {
+  font-size: 4rem;
+  font-weight: 900;
+  margin-top: 8px;
+  color: var(--epic-value-color, #FFE65C);
+  -webkit-text-stroke: 3px rgba(0, 0, 0, 0.4);
+  text-shadow:
+    0 0 30px var(--epic-value-color, rgba(255, 230, 92, 1)),
+    0 6px 12px rgba(0, 0, 0, 0.7);
+  animation: epicValuePop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
+}
+
+@keyframes epicValuePop {
+  0%   { transform: scale(0); opacity: 0; }
+  60%  { transform: scale(1.5); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.epic-effect__subtitle {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-top: 12px;
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+  animation: epicSubtitleFade 0.4s ease-out 0.3s both;
+}
+
+@keyframes epicSubtitleFade {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* === Particules === */
+.epic-effect__particles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.epic-effect__particle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--epic-particle-color, #FFE65C);
+  box-shadow: 0 0 12px var(--epic-particle-color, #FFE65C);
+  animation: epicParticleFly 1.2s cubic-bezier(0.4, 0.0, 0.2, 1) var(--p-delay, 0ms) forwards;
+  opacity: 0;
+}
+
+@keyframes epicParticleFly {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform:
+      rotate(var(--p-angle, 0deg))
+      translateX(180px)
+      scale(0.2);
+    opacity: 0;
+  }
+}
+
+/* ==========================================================================
+   COULEURS PAR TYPE
+   ========================================================================== */
+
+/* CRITIQUE — rose-doré */
+.epic-effect--critical {
+  --epic-glow-color: rgba(255, 79, 163, 0.9);
+  --epic-text-color: #FFE65C;
+  --epic-value-color: #FFE65C;
+  --epic-particle-color: #FFE65C;
+}
+
+/* DOUBLE CRITIQUE — or éclatant */
+.epic-effect--double_critical {
+  --epic-glow-color: rgba(255, 215, 0, 1);
+  --epic-text-color: #FFFFFF;
+  --epic-value-color: #FFE65C;
+  --epic-particle-color: #FFD700;
+}
+
+.epic-effect--double_critical .epic-effect__title {
+  font-size: 3.4rem;
+  animation: epicTitleSlamRainbow 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background: linear-gradient(90deg, #FF4FA3, #FFD700, #FF4FA3);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+  animation: epicTitleSlam 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), epicGradientShift 2s linear infinite;
+}
+
+@keyframes epicGradientShift {
+  from { background-position: 0% 0; }
+  to   { background-position: 200% 0; }
+}
+
+/* GHOSTÉ — violet sombre / fantôme */
+.epic-effect--ghosted {
+  --epic-glow-color: rgba(140, 90, 200, 0.9);
+  --epic-text-color: #E0C0FF;
+  --epic-particle-color: #C9A0DC;
+}
+
+.epic-effect--ghosted .epic-effect__icon {
+  animation: epicIconBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), ghostFloat 1.6s ease-in-out infinite alternate 0.8s;
+}
+
+@keyframes ghostFloat {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-12px); }
+}
+
+/* SAUVÉ (Bouclier) — or doré */
+.epic-effect--shielded {
+  --epic-glow-color: rgba(255, 215, 0, 1);
+  --epic-text-color: #FFFFFF;
+  --epic-value-color: #FFE65C;
+  --epic-particle-color: #FFD700;
+}
+
+/* DATE IMMINENT — rose intense */
+.epic-effect--date_imminent {
+  --epic-glow-color: rgba(255, 79, 163, 1);
+  --epic-text-color: #FFFFFF;
+  --epic-particle-color: #FF4FA3;
+}
+
+.epic-effect--date_imminent .epic-effect__icon {
+  animation: epicIconBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), heartBeat 0.8s ease-in-out infinite 0.8s;
+}
+
+@keyframes heartBeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+/* VICTOIRE — or + arc-en-ciel */
+.epic-effect--victory {
+  --epic-glow-color: rgba(255, 215, 0, 1);
+  --epic-text-color: #FFE65C;
+  --epic-value-color: #FFFFFF;
+  --epic-particle-color: #FFD700;
+}
+
+.epic-effect--victory .epic-effect__title {
+  font-size: 4rem;
+  background: linear-gradient(90deg, #FF4FA3, #FFD700, #4FC3F7, #66BB6A, #FF4FA3);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+  animation: epicTitleSlam 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), epicGradientShift 3s linear infinite;
+}
+
+/* NOPE — rouge intense */
+.epic-effect--nope {
+  --epic-glow-color: rgba(255, 60, 60, 1);
+  --epic-text-color: #FFFFFF;
+  --epic-particle-color: #FF3C3C;
+}
+
+.epic-effect--nope .epic-effect__title {
+  animation: epicTitleSlam 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), nopeShake 0.4s ease-in-out 0.5s 3;
+}
+
+@keyframes nopeShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px) rotate(-2deg); }
+  75% { transform: translateX(8px) rotate(2deg); }
+}
+
+/* COMBO STEAL — rose-pourpre */
+.epic-effect--combo_steal,
+.epic-effect--combo_request {
+  --epic-glow-color: rgba(192, 38, 211, 0.9);
+  --epic-text-color: #FFE65C;
+  --epic-particle-color: #E879F9;
+}
+
+/* ==========================================================================
+   MODE FLUIDE — versions allégées (low-end devices)
+   ========================================================================== */
+
+.epic-effect--simple {
+  animation: epicEffectInSimple 0.2s ease-out;
+}
+
+@keyframes epicEffectInSimple {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.epic-effect--simple.epic-effect--exit {
+  animation: epicEffectOutSimple 0.2s ease-in forwards;
+}
+
+@keyframes epicEffectOutSimple {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* En mode fluide : pas de glow, pas de filter, pas d'animation lourde */
+.epic-effect--simple .epic-effect__content {
+  filter: none;
+  background: rgba(20, 5, 40, 0.92);
+  padding: 24px 40px;
+  border-radius: 16px;
+  border: 2px solid var(--epic-glow-color, #FF4FA3);
+}
+
+.epic-effect--simple .epic-effect__icon {
+  font-size: 3.5rem;
+  filter: none;
+  animation: epicIconBounceSimple 0.3s ease-out;
+}
+
+@keyframes epicIconBounceSimple {
+  from { transform: scale(0.5); }
+  to   { transform: scale(1); }
+}
+
+.epic-effect--simple .epic-effect__title {
+  font-size: 2rem;
+  letter-spacing: 2px;
+  text-shadow: none;
+  -webkit-text-stroke: 0;
+  background: none !important;
+  -webkit-text-fill-color: var(--epic-text-color, #FFFFFF) !important;
+  color: var(--epic-text-color, #FFFFFF);
+  animation: none;
+}
+
+.epic-effect--simple .epic-effect__value {
+  font-size: 2.6rem;
+  text-shadow: none;
+  -webkit-text-stroke: 0;
+  animation: none;
+}
+
+.epic-effect--simple .epic-effect__subtitle {
+  font-size: 0.9rem;
+  text-shadow: none;
+  animation: none;
+}
+
+/* ==========================================================================
+   CARTE VOLANTE (carte qui s'envole vers défausse/cible)
+   ========================================================================== */
+
+.flying-card {
+  will-change: transform, opacity;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.5));
+}
+
+.low-end-mode .flying-card {
+  filter: none;
+}
+
+/* ==========================================================================
+   IMPACT SUR JOUEUR (flash sur portrait)
+   ========================================================================== */
+
+.opponent.impact-green,
+.player-board.impact-green,
+[data-player-uid].impact-green {
+  animation: impactGreen 0.8s ease-out;
+}
+
+@keyframes impactGreen {
+  0%   { box-shadow: 0 0 0 0 rgba(102, 187, 106, 0); }
+  20%  { box-shadow: 0 0 0 16px rgba(102, 187, 106, 0.6), 0 0 40px rgba(102, 187, 106, 1); }
+  100% { box-shadow: 0 0 0 0 rgba(102, 187, 106, 0); }
+}
+
+.opponent.impact-red,
+.player-board.impact-red,
+[data-player-uid].impact-red {
+  animation: impactRed 0.8s ease-out;
+}
+
+@keyframes impactRed {
+  0%   { box-shadow: 0 0 0 0 rgba(255, 60, 60, 0); transform: translateX(0); }
+  10%  { box-shadow: 0 0 0 16px rgba(255, 60, 60, 0.7), 0 0 40px rgba(255, 60, 60, 1); transform: translateX(-4px); }
+  20%  { transform: translateX(4px); }
+  30%  { transform: translateX(-4px); }
+  40%  { transform: translateX(4px); }
+  50%  { transform: translateX(-2px); }
+  60%  { transform: translateX(2px); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 60, 60, 0); transform: translateX(0); }
+}
+
+.opponent.impact-shield,
+.player-board.impact-shield,
+[data-player-uid].impact-shield {
+  animation: impactShield 1s ease-out;
+}
+
+@keyframes impactShield {
+  0%   { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+  30%  { box-shadow: 0 0 0 12px rgba(255, 215, 0, 0.5), 0 0 50px rgba(255, 215, 0, 1); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+}
+
+.opponent.impact-steal,
+.player-board.impact-steal,
+[data-player-uid].impact-steal {
+  animation: impactSteal 0.6s ease-out;
+}
+
+@keyframes impactSteal {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(0.95); filter: brightness(1.4); }
+  100% { transform: scale(1); }
+}
+
+/* En mode fluide : pas de filters, animations courtes */
+.low-end-mode .opponent.impact-green,
+.low-end-mode .opponent.impact-red,
+.low-end-mode .opponent.impact-shield,
+.low-end-mode .opponent.impact-steal,
+.low-end-mode .player-board.impact-green,
+.low-end-mode .player-board.impact-red,
+.low-end-mode .player-board.impact-shield,
+.low-end-mode .player-board.impact-steal {
+  animation-duration: 0.3s !important;
+}
+
+/* ==========================================================================
+   ORBE DE TRANSFERT (carte/flag qui passe d'un joueur à l'autre)
+   ========================================================================== */
+
+.transfer-orb {
+  position: fixed;
+  width: 48px;
+  height: 48px;
+  font-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 79, 163, 0.9) 0%, rgba(192, 38, 211, 0.8) 100%);
+  box-shadow: 0 0 24px rgba(255, 79, 163, 1), 0 0 48px rgba(255, 79, 163, 0.6);
+  pointer-events: none;
+  z-index: 9998;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+  transform: translate(-50%, -50%);
+}
+
+.low-end-mode .transfer-orb {
+  background: rgba(255, 79, 163, 0.95);
+  box-shadow: none;
+  filter: none;
+}
+
+/* ==========================================================================
+   SHAKE D'ÉCRAN
+   ========================================================================== */
+
+.screen-shake-light {
+  animation: shakeLight 0.4s ease-in-out;
+}
+
+@keyframes shakeLight {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-2px, 1px); }
+  50% { transform: translate(2px, -1px); }
+  75% { transform: translate(-1px, -1px); }
+}
+
+.screen-shake-medium {
+  animation: shakeMedium 0.5s ease-in-out;
+}
+
+@keyframes shakeMedium {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-5px, 2px); }
+  40% { transform: translate(5px, -2px); }
+  60% { transform: translate(-3px, -3px); }
+  80% { transform: translate(3px, 3px); }
+}
+
+.screen-shake-strong {
+  animation: shakeStrong 0.6s ease-in-out;
+}
+
+@keyframes shakeStrong {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-8px, 3px) rotate(-0.3deg); }
+  20% { transform: translate(8px, -3px) rotate(0.3deg); }
+  30% { transform: translate(-6px, -4px); }
+  40% { transform: translate(6px, 4px); }
+  50% { transform: translate(-4px, 4px); }
+  60% { transform: translate(4px, -4px); }
+  70% { transform: translate(-3px, -2px); }
+  80% { transform: translate(3px, 2px); }
+  90% { transform: translate(-1px, 1px); }
+}

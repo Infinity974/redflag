@@ -1,0 +1,447 @@
+/* ==========================================================================
+   RedFlag — Lobby (salle d'attente)
+   ========================================================================== */
+
+.lobby-screen {
+  padding: var(--space-5);
+  gap: var(--space-5);
+}
+
+/* ---- Header avec code de salon ---- */
+.lobby-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.header-spacer { width: 48px; }
+
+.btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--color-purple-mid);
+  color: var(--color-white);
+  font-size: var(--fs-xl);
+  border: 2px solid var(--color-white-subtle);
+  transition: all var(--transition-fast);
+}
+
+.btn-icon:hover {
+  background: var(--color-pink);
+  border-color: var(--color-pink);
+}
+
+.btn-icon-small {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--color-white-subtle);
+  font-size: var(--fs-md);
+  transition: background var(--transition-fast);
+}
+
+.btn-icon-small:hover { background: var(--color-pink); }
+
+/* ---- Code de salon en gros (centré et copiable) ---- */
+.room-code-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  position: relative;
+}
+
+.room-code-display__label {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--color-white-muted);
+  font-weight: var(--fw-medium);
+}
+
+.room-code-display__code {
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-black);
+  color: var(--color-gold);
+  letter-spacing: 12px;
+  padding: var(--space-2) var(--space-5);
+  text-shadow: 0 0 24px rgba(var(--gold-rgb), 0.5);
+}
+
+.room-code-display .btn-icon-small {
+  position: absolute;
+  right: -48px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* ---- Section principale ---- */
+.lobby-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.lobby-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  color: var(--color-white);
+  text-align: center;
+  margin-bottom: var(--space-2);
+}
+
+.lobby-subtitle {
+  font-size: var(--fs-sm);
+  color: var(--color-white-muted);
+  margin-bottom: var(--space-5);
+  text-align: center;
+}
+
+#playerCount {
+  color: var(--color-pink);
+  font-weight: var(--fw-bold);
+}
+
+/* ---- Grille des joueurs ---- */
+.players-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+  width: 100%;
+  overflow-y: auto;
+  padding: var(--space-2);
+}
+
+.player-slot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-purple-mid);
+  border-radius: var(--radius-lg);
+  border: 2px solid transparent;
+  transition: all var(--transition-base);
+}
+
+.player-slot--filled {
+  border-color: var(--color-pink);
+  box-shadow: var(--shadow-md);
+  animation: slide-up 0.3s ease-out;
+}
+
+.player-slot--host {
+  border-color: var(--color-gold);
+  box-shadow: var(--shadow-md), var(--glow-gold);
+}
+
+.player-slot--empty {
+  background: transparent;
+  border: 2px dashed var(--color-white-subtle);
+  justify-content: center;
+}
+
+.player-slot__placeholder {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-white-muted);
+}
+
+.player-slot__icon {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+}
+
+.player-slot__text {
+  font-size: var(--fs-sm);
+}
+
+/* ---- Avatar du joueur ---- */
+.player-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-black);
+  color: var(--color-white);
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.player-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.player-name {
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-md);
+  color: var(--color-white);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player-tag {
+  font-size: var(--fs-xs);
+  color: var(--color-white-muted);
+}
+
+/* ---- Statut prêt ---- */
+.player-status {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  flex-shrink: 0;
+}
+
+.player-status--ready {
+  background: var(--color-green);
+  color: var(--color-purple-night);
+}
+
+/* ---- Footer ---- */
+.lobby-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.lobby-footer__hint {
+  font-size: var(--fs-sm);
+  color: var(--color-white-muted);
+  text-align: center;
+}
+
+/* ==========================================================================
+   Adaptation petits écrans
+   ========================================================================== */
+
+@media (max-width: 600px) {
+  .players-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .room-code-display__code {
+    font-size: var(--fs-xl);
+    letter-spacing: 8px;
+  }
+
+  .room-code-display .btn-icon-small {
+    right: -42px;
+  }
+}
+
+@media (max-height: 500px) {
+  .lobby-screen {
+    padding: var(--space-3);
+    gap: var(--space-3);
+  }
+
+  .lobby-title {
+    font-size: var(--fs-lg);
+  }
+
+  .player-slot {
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .player-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: var(--fs-md);
+  }
+}
+
+/* ==========================================================================
+   Lobby v2 — player-card (refonte avec bots/host)
+   ========================================================================== */
+
+.players-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-3);
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.player-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: 16px;
+  background: linear-gradient(135deg,
+    rgba(155, 79, 255, 0.18) 0%,
+    rgba(255, 79, 163, 0.12) 100%);
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  animation: playerCardSlideIn 0.3s ease-out;
+}
+
+@keyframes playerCardSlideIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.player-card--me {
+  border-color: var(--color-pink);
+  box-shadow: 0 0 16px rgba(var(--primary-rgb), 0.3);
+}
+
+.player-card--bot {
+  background: linear-gradient(135deg,
+    rgba(80, 80, 100, 0.3) 0%,
+    rgba(50, 50, 70, 0.2) 100%);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.player-card__avatar {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 900;
+  color: white;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.player-card__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.player-card__name {
+  font-weight: 700;
+  color: var(--color-white);
+  font-size: var(--fs-base);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player-card__badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  width: fit-content;
+}
+
+.player-card__badge--host {
+  background: linear-gradient(90deg, #FFD93D, #FFA03C);
+  color: #2A0E4D;
+}
+
+.player-card__badge--bot {
+  background: rgba(120, 120, 140, 0.5);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.player-card__actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.player-card__btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--color-white);
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.player-card__btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  transform: scale(1.08);
+}
+
+.player-card__btn--danger:hover {
+  background: rgba(255, 60, 60, 0.85);
+  color: white;
+}
+
+/* ---- Bot controls ---- */
+.lobby-bot-controls {
+  margin-top: var(--space-3);
+  width: 100%;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ---- Footer avec 2 boutons ---- */
+.lobby-footer__buttons {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.lobby-footer__buttons .btn {
+  flex: 1;
+  min-width: 200px;
+  max-width: 320px;
+}
+
+/* Bouton secondary (configurer) */
+.btn--secondary {
+  background: rgba(155, 79, 255, 0.4);
+  color: var(--color-white);
+  border: 2px solid rgba(155, 79, 255, 0.6);
+}
+.btn--secondary:hover:not(:disabled) {
+  background: rgba(155, 79, 255, 0.6);
+  border-color: rgba(155, 79, 255, 0.9);
+}

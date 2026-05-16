@@ -1,0 +1,56 @@
+# === Dépendances Node.js (s'installeront avec npm install) ===
+node_modules/
+package-lock.json
+
+# === Firebase ===
+# Cache de la CLI Firebase (regénéré localement)
+.firebase/
+# Token d'auth Firebase CLI (NE JAMAIS COMMIT)
+.firebaserc
+# Credentials de service account (TRÈS IMPORTANT — clés privées)
+*-firebase-adminsdk-*.json
+firebase-credentials.json
+serviceAccountKey.json
+
+# === Fichiers de config locaux contenant des secrets ===
+.env
+.env.local
+.env.*.local
+
+# === Éditeurs / IDE ===
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# === Système d'exploitation ===
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+# Linux
+*~
+
+# === Logs ===
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# === Builds / Distribution ===
+dist/
+build/
+out/
+
+# === Tests / Coverage ===
+coverage/
+.nyc_output/
+
+# === Caches divers ===
+.cache/
+.tmp/
+*.swp
+*.swo

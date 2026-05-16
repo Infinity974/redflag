@@ -1,0 +1,169 @@
+/* ==========================================================================
+   RedFlag — Animations & Keyframes
+   Toutes les animations partagées du jeu vivent ici.
+   ========================================================================== */
+
+/* ---- Pulse rose pour le joueur actif ---- */
+@keyframes pulse-pink {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(var(--primary-rgb), 0);
+  }
+}
+
+/* ---- Pulse doré pour DATE IMMINENT ---- */
+@keyframes pulse-gold {
+  0%, 100% {
+    box-shadow: 0 0 24px rgba(var(--gold-rgb), 0.6),
+                0 0 48px rgba(var(--gold-rgb), 0.3);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 36px rgba(var(--gold-rgb), 0.9),
+                0 0 72px rgba(var(--gold-rgb), 0.5);
+    transform: scale(1.04);
+  }
+}
+
+/* ---- Pulse rouge pour la chaîne de pioche ---- */
+@keyframes pulse-chain {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.06);
+    filter: brightness(1.2);
+  }
+}
+
+/* ---- Float doux pour les badges de traits ---- */
+@keyframes float-soft {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* ---- Flip de carte (Retournement de Veste) ---- */
+@keyframes card-flip {
+  0% { transform: rotateY(0); }
+  50% { transform: rotateY(90deg) scale(1.1); }
+  100% { transform: rotateY(180deg); }
+}
+
+/* ---- Shake pour effet d'attaque reçue ---- */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+  20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+
+/* ---- Glitch pour Tu es Ghosté ---- */
+@keyframes glitch {
+  0%, 100% {
+    transform: translate(0);
+    filter: hue-rotate(0deg);
+  }
+  20% {
+    transform: translate(-3px, 2px);
+    filter: hue-rotate(90deg);
+  }
+  40% {
+    transform: translate(3px, -2px);
+    filter: hue-rotate(180deg);
+  }
+  60% {
+    transform: translate(-2px, -3px);
+    filter: hue-rotate(270deg);
+  }
+  80% {
+    transform: translate(2px, 3px);
+    filter: hue-rotate(360deg);
+  }
+}
+
+/* ---- Glow pulsant pour les cartes activables ---- */
+@keyframes glow-activable {
+  0%, 100% {
+    box-shadow: 0 0 12px var(--color-gold);
+  }
+  50% {
+    box-shadow: 0 0 24px var(--color-gold),
+                0 0 48px rgba(var(--gold-rgb), 0.4);
+  }
+}
+
+/* ---- Slide in depuis le bas ---- */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ---- Fade in simple ---- */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ---- Coup critique : flash doré ---- */
+@keyframes critical-flash {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 var(--color-gold);
+  }
+  50% {
+    transform: scale(1.15);
+    box-shadow: 0 0 80px var(--color-gold),
+                0 0 120px rgba(var(--gold-rgb), 0.5);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 transparent;
+  }
+}
+
+/* ---- Jauge qui se remplit ---- */
+@keyframes gauge-fill {
+  from { transform: scaleY(var(--gauge-from, 0)); }
+  to { transform: scaleY(var(--gauge-to, 1)); }
+}
+
+/* ---- Cœurs flottants en arrière-plan ---- */
+@keyframes hearts-drift {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.15;
+  }
+  100% {
+    transform: translateY(-40px) rotate(20deg);
+    opacity: 0.05;
+  }
+}
+
+/* ---- Classes utilitaires pour appliquer les animations ---- */
+.animate-pulse-pink { animation: pulse-pink 2s infinite; }
+.animate-pulse-gold { animation: pulse-gold 1.5s ease-in-out infinite; }
+.animate-pulse-chain { animation: pulse-chain 0.8s ease-in-out infinite; }
+.animate-float-soft { animation: float-soft 3s ease-in-out infinite; }
+.animate-shake { animation: shake 0.5s; }
+.animate-glitch { animation: glitch 0.6s steps(4); }
+.animate-glow-activable { animation: glow-activable 1.8s ease-in-out infinite; }
+.animate-slide-up { animation: slide-up 0.4s ease-out; }
+.animate-fade-in { animation: fade-in 0.3s ease-out; }
+.animate-critical { animation: critical-flash 0.7s ease-out; }
+
+/* Préférences accessibilité : on respecte si l'utilisateur a coupé les animations */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

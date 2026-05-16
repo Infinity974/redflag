@@ -1,0 +1,280 @@
+/* ==========================================================================
+   RedFlag — Page d'accueil
+   ========================================================================== */
+
+.home-screen {
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  overflow: hidden;
+}
+
+/* ---- Logo & Header ---- */
+.home-header {
+  text-align: center;
+  margin-bottom: var(--space-10);
+  z-index: 2;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.logo__flag {
+  font-size: var(--fs-3xl);
+  filter: drop-shadow(0 0 16px rgba(230, 57, 70, 0.6));
+  animation: float-soft 3s ease-in-out infinite;
+}
+
+.logo__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-display);
+  font-weight: var(--fw-black);
+  background: linear-gradient(135deg, var(--color-pink) 0%, var(--color-gold) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -1px;
+  text-shadow: 0 0 32px rgba(var(--primary-rgb), 0.5);
+}
+
+.home-tagline {
+  font-size: var(--fs-md);
+  color: var(--color-white-soft);
+  font-weight: var(--fw-medium);
+  font-style: italic;
+}
+
+/* ---- Cartes décoratives flottantes ---- */
+.floating-cards {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.floating-card {
+  position: absolute;
+  font-size: 48px;
+  opacity: 0.15;
+  animation: float-soft 4s ease-in-out infinite;
+}
+
+.floating-card--1 { top: 15%; left: 8%; animation-delay: 0s; }
+.floating-card--2 { top: 70%; left: 12%; animation-delay: 0.8s; }
+.floating-card--3 { top: 20%; right: 10%; animation-delay: 1.6s; font-size: 56px; }
+.floating-card--4 { top: 65%; right: 8%; animation-delay: 2.4s; }
+
+/* ---- Bloc d'action central ---- */
+.home-actions {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  z-index: 2;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.input-label {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-white-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding-left: var(--space-2);
+}
+
+.input-field {
+  width: 100%;
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-purple-mid);
+  border: 2px solid var(--color-white-subtle);
+  border-radius: var(--radius-lg);
+  color: var(--color-white);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-medium);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.input-field::placeholder {
+  color: var(--color-white-muted);
+}
+
+.input-field:focus {
+  border-color: var(--color-pink);
+  box-shadow: var(--glow-pink);
+}
+
+.input-field--code {
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  text-align: center;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  flex: 1;
+}
+
+.input-field--code::placeholder {
+  letter-spacing: 8px;
+  color: var(--color-white-subtle);
+}
+
+/* ---- Action block (un titre + son contenu) ---- */
+.action-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.action-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--color-pink-light);
+  text-align: center;
+}
+
+.room-code-input {
+  display: flex;
+  gap: var(--space-3);
+  align-items: stretch;
+}
+
+.room-code-input .btn {
+  white-space: nowrap;
+}
+
+/* ---- Séparateur OU ---- */
+.separator {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-2) 0;
+}
+
+.separator__line {
+  flex: 1;
+  height: 1px;
+  background: var(--color-white-subtle);
+}
+
+.separator__text {
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  color: var(--color-white-muted);
+  letter-spacing: 2px;
+}
+
+/* ---- Bouton plein largeur ---- */
+.btn--full {
+  width: 100%;
+}
+
+/* ---- Footer ---- */
+.home-footer {
+  position: absolute;
+  bottom: var(--space-6);
+  text-align: center;
+  z-index: 2;
+}
+
+.home-footer p {
+  font-size: var(--fs-xs);
+  color: var(--color-white-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   Avertissement orientation portrait (mobile uniquement)
+   ========================================================================== */
+
+.orientation-warning {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: var(--color-purple-night);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+}
+
+.orientation-warning__content {
+  text-align: center;
+}
+
+.orientation-warning__icon {
+  font-size: 80px;
+  display: inline-block;
+  animation: rotate-phone 2s ease-in-out infinite;
+  margin-bottom: var(--space-4);
+}
+
+@keyframes rotate-phone {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(90deg); }
+}
+
+.orientation-warning h2 {
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  color: var(--color-pink);
+  margin-bottom: var(--space-2);
+}
+
+.orientation-warning p {
+  color: var(--color-white-muted);
+}
+
+/* Active l'avertissement uniquement sur mobile en portrait, après l'accueil
+   (l'accueil reste utilisable en portrait, c'est la partie qui doit être landscape) */
+@media (max-width: 900px) and (orientation: portrait) {
+  body[data-force-landscape="true"] .orientation-warning {
+    display: flex;
+  }
+}
+
+/* ==========================================================================
+   Adaptation petits écrans
+   ========================================================================== */
+
+@media (max-height: 600px) {
+  .home-header {
+    margin-bottom: var(--space-6);
+  }
+
+  .logo__title {
+    font-size: var(--fs-3xl);
+  }
+
+  .floating-card {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo__title {
+    font-size: var(--fs-3xl);
+  }
+
+  .room-code-input {
+    flex-direction: column;
+  }
+
+  .input-field--code {
+    text-align: center;
+  }
+}

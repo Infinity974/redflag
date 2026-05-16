@@ -1,0 +1,1060 @@
+/* ==========================================================================
+   RedFlag — Dialogs & Toasts (refonte)
+   ========================================================================== */
+
+.dialog-container {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-5);
+  background: rgba(15, 5, 33, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.dialog-container--open {
+  display: flex;
+}
+
+.dialog-container--dramatic {
+  background: rgba(0, 0, 0, 0.92);
+}
+
+.dialog {
+  background: var(--color-purple-mid);
+  border: 2px solid var(--color-pink);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg), var(--glow-pink);
+  position: relative;
+}
+
+/* Themes par type de carte (couleur lumineuse adaptée) */
+.dialog--theme-green {
+  border-color: var(--color-green);
+  box-shadow: var(--shadow-lg), 0 0 32px rgba(57, 255, 106, 0.5);
+}
+.dialog--theme-red {
+  border-color: var(--color-red);
+  box-shadow: var(--shadow-lg), 0 0 32px rgba(230, 57, 70, 0.5);
+}
+.dialog--theme-purple {
+  border-color: var(--color-purple-accent);
+  box-shadow: var(--shadow-lg), 0 0 32px rgba(var(--secondary-rgb), 0.5);
+}
+.dialog--theme-cyan {
+  border-color: var(--color-cyan);
+  box-shadow: var(--shadow-lg), 0 0 32px rgba(79, 195, 255, 0.5);
+}
+.dialog--theme-gold {
+  border-color: var(--color-gold);
+  box-shadow: var(--shadow-lg), var(--glow-gold);
+}
+
+.dialog__header {
+  text-align: center;
+  margin-bottom: var(--space-4);
+  padding-top: var(--space-2);
+}
+
+/* Top bar : carte miniature à gauche, header centré à droite — pas de chevauchement */
+.dialog__top-bar {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-4);
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+
+.dialog__top-bar .dialog__header {
+  margin-bottom: 0;
+  padding-top: 0;
+  text-align: left;
+}
+
+.dialog__top-bar .dialog__card-preview {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  transform: scale(0.65) !important;
+  transform-origin: top left !important;
+  width: 110px;
+  height: 168px;
+}
+
+@media (max-width: 600px) {
+  .dialog__top-bar {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .dialog__top-bar .dialog__card-preview {
+    margin: 0 auto;
+    transform: scale(0.55) !important;
+    transform-origin: top center !important;
+  }
+  .dialog__top-bar .dialog__header {
+    text-align: center;
+  }
+}
+
+/* ==========================================================================
+   STEAL HAND PICKER (combo Crush x2)
+   ========================================================================== */
+
+.dialog--steal {
+  border-color: var(--color-pink);
+  box-shadow: var(--shadow-lg), 0 0 32px rgba(var(--primary-rgb), 0.6);
+}
+
+.steal-hand {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  justify-content: center;
+  padding: var(--space-4);
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  margin-bottom: var(--space-4);
+  min-height: 100px;
+}
+
+.steal-card-back {
+  position: relative;
+  border: 2px solid var(--color-gold);
+  background: linear-gradient(135deg, var(--color-pink) 0%, var(--color-purple-accent) 100%);
+}
+
+.steal-card-back__num {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 900;
+  color: var(--color-white);
+  background: rgba(0, 0, 0, 0.6);
+  padding: 1px 6px;
+  border-radius: 999px;
+  z-index: 2;
+}
+
+.empty-hand {
+  color: var(--color-white-muted);
+  font-style: italic;
+}
+
+.dialog__header h3 {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  color: var(--color-pink);
+  margin-bottom: var(--space-2);
+}
+
+.dialog--theme-green .dialog__header h3 { color: var(--color-green); }
+.dialog--theme-red .dialog__header h3 { color: var(--color-red-light); }
+.dialog--theme-purple .dialog__header h3 { color: var(--color-purple-accent); }
+.dialog--theme-cyan .dialog__header h3 { color: var(--color-cyan); }
+.dialog--theme-gold .dialog__header h3 { color: var(--color-gold); }
+
+.dialog__header p {
+  color: var(--color-white-muted);
+  font-size: var(--fs-sm);
+}
+
+/* ---- CARTE MINIATURE en haut à gauche ---- */
+.dialog__card-preview {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  transform: scale(0.65);
+  transform-origin: top left;
+  filter: drop-shadow(0 8px 20px rgba(var(--primary-rgb), 0.4));
+  pointer-events: none;
+  z-index: 2;
+}
+
+.dialog__card-preview .game-card {
+  cursor: default !important;
+}
+
+/* ==========================================================================
+   Liste de cibles
+   ========================================================================== */
+
+.dialog__targets {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+  margin-left: 90px; /* place pour la carte miniature */
+}
+
+@media (max-width: 600px) {
+  .dialog__targets {
+    margin-left: 0;
+    grid-template-columns: 1fr 1fr;
+  }
+  .dialog__card-preview {
+    position: relative;
+    top: auto;
+    left: auto;
+    margin: 0 auto var(--space-3);
+    transform: scale(0.8);
+    transform-origin: top center;
+    display: block;
+    width: fit-content;
+  }
+}
+
+.target-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--color-purple-night);
+  border: 2px solid var(--color-white-subtle);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: left;
+}
+
+.target-btn:hover {
+  border-color: var(--color-pink);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md), var(--glow-pink);
+}
+
+.target-btn--me {
+  border-color: var(--color-gold);
+  background: linear-gradient(135deg, rgba(var(--gold-rgb), 0.1), rgba(var(--primary-rgb), 0.1));
+}
+
+.target-btn--me::before {
+  content: '⭐';
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: var(--color-gold);
+  color: var(--color-purple-night);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  border: 2px solid var(--color-white);
+  box-shadow: var(--glow-gold);
+}
+
+.target-btn__me-badge {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-gold);
+  color: var(--color-purple-night);
+  font-family: var(--font-display);
+  font-size: 9px;
+  font-weight: var(--fw-black);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  letter-spacing: 1px;
+  box-shadow: var(--glow-gold);
+}
+
+.target-btn__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  flex-shrink: 0;
+  color: white;
+}
+
+.target-btn__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.target-btn__name {
+  font-weight: var(--fw-bold);
+  color: var(--color-white);
+  font-size: var(--fs-md);
+}
+
+.target-btn__gauge-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.target-btn__gauge-wrap .gauge-heart {
+  width: 28px;
+  height: 24px;
+}
+
+.target-btn__gauge-wrap .gauge-heart__value {
+  font-size: 8px;
+}
+
+.dialog__cancel {
+  width: 100%;
+  margin-top: var(--space-3);
+}
+
+/* ==========================================================================
+   Combo Crush x3 : choix de carte demandée
+   ========================================================================== */
+
+.request-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+@media (max-width: 480px) {
+  .request-options {
+    grid-template-columns: 1fr;
+  }
+}
+
+.request-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--color-purple-night);
+  border: 2px solid var(--color-white-subtle);
+  border-radius: var(--radius-md);
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.request-btn:hover {
+  border-color: var(--color-gold);
+  transform: translateY(-2px);
+  box-shadow: var(--glow-gold);
+}
+
+.request-btn__emoji {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.request-btn__label {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-white);
+}
+
+/* ==========================================================================
+   GHOSTED REVEAL
+   ========================================================================== */
+
+.dialog--ghosted {
+  background: var(--color-purple-deep);
+  border-color: var(--color-red);
+  box-shadow: var(--shadow-lg), var(--glow-red);
+}
+
+.ghosted-reveal {
+  text-align: center;
+  margin-bottom: var(--space-5);
+}
+
+.ghosted-reveal__sms {
+  background: linear-gradient(135deg, #1A1A1A 0%, #0F0F0F 100%);
+  border: 2px solid var(--color-red);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  font-family: var(--font-mono);
+}
+
+.ghosted-reveal__from {
+  font-size: var(--fs-xs);
+  color: var(--color-white-muted);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: var(--space-2);
+}
+
+.ghosted-reveal__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-3xl);
+  font-weight: var(--fw-black);
+  color: var(--color-red);
+  margin: var(--space-3) 0;
+  text-shadow: 0 0 20px rgba(230, 57, 70, 0.6);
+}
+
+.ghosted-reveal__message {
+  color: var(--color-white-soft);
+  font-size: var(--fs-md);
+}
+
+.ghosted-reveal__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.ghosted-no-shield {
+  color: var(--color-white-muted);
+  font-style: italic;
+  text-align: center;
+}
+
+/* ==========================================================================
+   REPLACEMENT GHOSTÉ : nouvel outil visuel
+   ========================================================================== */
+
+.dialog--replacement {
+  border-color: var(--color-gold);
+  box-shadow: var(--shadow-lg), var(--glow-gold);
+}
+
+.replacement-tool {
+  margin: var(--space-4) 0;
+}
+
+.deck-preview {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 2px;
+  padding: var(--space-3);
+  background: var(--color-purple-night);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-white-subtle);
+  min-height: 80px;
+  margin-bottom: var(--space-3);
+  overflow-x: auto;
+}
+
+.deck-slot {
+  width: 32px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--color-pink), var(--color-purple-accent));
+  border-radius: 4px;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.deck-slot--ghosted {
+  background: linear-gradient(135deg, #000000, #2a0e4d);
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  box-shadow: 0 0 12px var(--color-gold);
+  animation: pulse-gold 1s ease-in-out infinite;
+  z-index: 5;
+  width: 36px;
+  height: 56px;
+}
+
+.deck-slot__icon {
+  font-size: 16px;
+}
+
+.deck-slot--ghosted .deck-slot__icon {
+  font-size: 20px;
+}
+
+.deck-slot__label {
+  font-family: var(--font-display);
+  font-size: 7px;
+  font-weight: var(--fw-black);
+  color: var(--color-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.position-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.position-btn {
+  flex-shrink: 0;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-purple-night);
+  border: 2px solid var(--color-white-subtle);
+  border-radius: var(--radius-md);
+  color: var(--color-white);
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: var(--fw-bold);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-transform: uppercase;
+}
+
+.position-btn:hover {
+  border-color: var(--color-gold);
+  background: rgba(var(--gold-rgb), 0.1);
+}
+
+.position-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  background: linear-gradient(90deg, var(--color-pink), var(--color-purple-accent));
+  border-radius: var(--radius-pill);
+  outline: none;
+  border: 1px solid var(--color-gold);
+}
+
+.position-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--color-gold);
+  cursor: pointer;
+  border: 2px solid var(--color-white);
+  box-shadow: var(--glow-gold);
+}
+
+.position-slider::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--color-gold);
+  cursor: pointer;
+  border: 2px solid var(--color-white);
+  box-shadow: var(--glow-gold);
+}
+
+.position-label {
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  color: var(--color-gold);
+  padding: var(--space-2);
+  background: rgba(var(--gold-rgb), 0.1);
+  border-radius: var(--radius-md);
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   GAME OVER
+   ========================================================================== */
+
+.dialog--gameover {
+  background: linear-gradient(135deg, var(--color-pink) 0%, var(--color-purple-accent) 100%);
+  border: 3px solid var(--color-gold);
+  box-shadow: var(--shadow-lg), var(--glow-gold);
+  text-align: center;
+}
+
+.gameover__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-3xl);
+  font-weight: var(--fw-black);
+  color: var(--color-gold);
+  margin-bottom: var(--space-5);
+  text-shadow: 0 0 24px rgba(var(--gold-rgb), 0.8);
+}
+
+.gameover__winner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+}
+
+.gameover__avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-black);
+  color: var(--color-white);
+  border: 3px solid var(--color-gold);
+  box-shadow: var(--glow-gold);
+}
+
+.gameover__name {
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-black);
+  color: var(--color-white);
+}
+
+.gameover__crush {
+  color: var(--color-white-soft);
+  font-size: var(--fs-sm);
+}
+
+.gameover__breakups {
+  margin: var(--space-5) 0;
+  text-align: left;
+}
+
+.gameover__breakups h3 {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  color: var(--color-gold);
+  text-align: center;
+  margin-bottom: var(--space-3);
+  text-transform: uppercase;
+}
+
+.breakup-sms {
+  background: rgba(0, 0, 0, 0.4);
+  border-left: 3px solid var(--color-red);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+}
+
+.breakup-sms__from,
+.breakup-sms__to {
+  font-size: var(--fs-xs);
+  color: var(--color-white-muted);
+}
+
+.breakup-sms__body {
+  margin-top: var(--space-2);
+  color: var(--color-white);
+  font-style: italic;
+}
+
+.gameover__actions {
+  margin-top: var(--space-5);
+}
+
+/* ==========================================================================
+   TOASTS — apparition centrée avec fade + scale (pas de glissement latéral)
+   ========================================================================== */
+
+.toast {
+  position: fixed;
+  /* Centrage absolu en haut-centre (proche du Crush, pas du haut de l'écran) */
+  top: clamp(80px, 14vh, 180px);
+  left: 50%;
+  /* État initial = état final pour la position. Le translateX reste constant. */
+  transform: translateX(-50%) scale(1);
+  padding: clamp(8px, 1.2vmin, 14px) clamp(16px, 2.4vmin, 28px);
+  background: var(--color-bg-elevated);
+  border: 2px solid var(--color-pink);
+  border-radius: 999px;
+  color: var(--color-white);
+  font-family: var(--font-display);
+  font-size: clamp(11px, 1.4vmin, 15px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 24px rgba(var(--primary-rgb), 0.3);
+  z-index: 999;
+  pointer-events: none;
+  max-width: min(90vw, 600px);
+  text-align: center;
+  /* Animation d'entrée : fade + scale uniquement, pas de translation Y */
+  animation: toast-pop-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes toast-pop-in {
+  0% {
+    transform: translateX(-50%) scale(0.6);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(-50%) scale(1.08);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Animation de sortie */
+.toast--fade-out {
+  animation: toast-pop-out 0.3s ease-out forwards;
+}
+
+@keyframes toast-pop-out {
+  0% {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-50%) scale(0.85);
+    opacity: 0;
+  }
+}
+
+.toast--info {
+  border-color: var(--color-pink);
+}
+
+.toast--critical {
+  background: var(--color-gold);
+  color: var(--color-bg-base);
+  border-color: var(--color-gold);
+  font-size: clamp(13px, 1.7vmin, 18px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 32px rgba(var(--gold-rgb), 0.6);
+}
+
+.toast--error {
+  background: var(--color-red);
+  border-color: var(--color-red);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 24px rgba(230, 57, 70, 0.5);
+}
+
+.toast--warning {
+  background: var(--color-purple-accent);
+  border-color: var(--color-gold);
+}
+
+.toast--flip {
+  background: linear-gradient(90deg, var(--color-green-dark), var(--color-red-dark));
+  border-color: var(--color-gold);
+}
+
+/* ==========================================================================
+   DIALOGS EXPLODING KITTENS
+   ========================================================================== */
+
+/* Mélanger */
+.dialog--shuffle {
+  max-width: 90vw;
+}
+.shuffle-step {
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: var(--color-gold);
+  text-align: center;
+  margin: 12px 0;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+.shuffle-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+.shuffle-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  background: var(--color-bg-elevated);
+  border: 2px solid var(--color-pink);
+  border-radius: 12px;
+  color: var(--color-white);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.shuffle-card:hover:not(:disabled) {
+  background: var(--color-pink);
+  transform: translateY(-3px);
+}
+.shuffle-card--selected.shuffle-card--top {
+  background: var(--color-gold);
+  color: var(--color-bg-base);
+  border-color: var(--color-gold);
+}
+.shuffle-card__emoji {
+  font-size: 24px;
+}
+.shuffle-card__name {
+  font-family: var(--font-display);
+  font-size: 11px;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* Faveur */
+
+/* ── Faveur ── */
+.dialog--favor { max-width: 92vw; }
+
+.favor-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+  margin: 12px 0;
+}
+.favor-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-elevated);
+  border: 2px solid var(--color-pink);
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+}
+.favor-card:hover { transform: translateY(-4px) scale(1.03); border-color: var(--color-gold); }
+
+.favor-card__visual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 8px 8px;
+  gap: 4px;
+}
+.favor-card__emoji { font-size: 32px; line-height: 1; }
+.favor-card__type-label {
+  font-family: var(--font-display);
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.8);
+}
+.favor-card__info { padding: 8px 10px 10px; }
+.favor-card__name { font-family: var(--font-display); font-size: 12px; font-weight: 800; color: var(--color-white); margin-bottom: 3px; }
+.favor-card__desc { font-size: 10px; color: var(--color-white-muted); font-style: italic; line-height: 1.3; }
+
+/* ── Changer l'avenir ── */
+.dialog--alter { max-width: 640px; width: 90vw; }
+
+.alter-cards-list {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  margin: 16px 0;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.alter-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 150px;
+  max-width: 200px;
+}
+.alter-card__label {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 900;
+  color: var(--color-gold);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.alter-card__visual {
+  width: 100%;
+  border-radius: 14px;
+  padding: 16px 10px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  border: 2px solid rgba(255,255,255,0.2);
+  min-height: 130px;
+  justify-content: center;
+}
+.alter-card--danger { border-color: #ef4444 !important; }
+.alter-card__emoji { font-size: 36px; line-height: 1; }
+.alter-card__name { font-family: var(--font-display); font-size: 12px; font-weight: 800; color: #fff; text-align: center; }
+.alter-card__desc { font-size: 10px; color: rgba(255,255,255,0.7); text-align: center; font-style: italic; }
+.alter-card__arrows { display: flex; gap: 6px; }
+.alter-btn {
+  background: var(--color-pink);
+  border: none;
+  border-radius: 8px;
+  color: var(--color-white);
+  cursor: pointer;
+  padding: 5px 10px;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  transition: background 0.15s;
+}
+.alter-btn:hover { background: var(--color-gold); color: var(--color-bg-base); }
+
+/* ── Divination / Stalker ── */
+.dialog--divin {
+  max-width: min(96vw, 860px);
+  background: var(--color-bg-elevated);
+}
+
+.divin-cards {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin: 16px 0;
+  flex-wrap: wrap;
+  padding: 8px;
+}
+
+/* Chaque carte : rendu identique à une vraie carte de jeu */
+.divin-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  border-radius: 16px;
+  width: 160px;
+  min-height: 240px;
+  border: 2px solid rgba(255,255,255,0.25);
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  padding: 0;
+}
+.divin-card--danger { border-color: #ef4444 !important; }
+
+/* Bande supérieure (type + position) */
+.divin-card__header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px 6px;
+  background: rgba(0,0,0,0.3);
+}
+.divin-card__pos {
+  font-family: var(--font-display);
+  font-size: 9px;
+  font-weight: 900;
+  color: rgba(255,255,255,0.9);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: rgba(0,0,0,0.4);
+  padding: 2px 6px;
+  border-radius: 999px;
+}
+.divin-card__type {
+  font-family: var(--font-display);
+  font-size: 8px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.7);
+  text-transform: uppercase;
+}
+
+/* Zone centrale emoji */
+.divin-card__emoji {
+  font-size: 52px;
+  line-height: 1;
+  padding: 10px 0 4px;
+  text-align: center;
+  width: 100%;
+}
+
+/* Valeur % de la carte */
+.divin-card__value {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 900;
+  text-align: center;
+  padding: 0 8px 4px;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  letter-spacing: -0.5px;
+  width: 100%;
+}
+
+/* Nom de la carte */
+.divin-card__name {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 900;
+  color: #fff;
+  text-align: center;
+  padding: 0 10px 6px;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* Description */
+.divin-card__desc {
+  font-size: 10px;
+  color: rgba(255,255,255,0.8);
+  font-style: italic;
+  text-align: center;
+  padding: 0 10px 8px;
+  line-height: 1.35;
+  flex: 1;
+}
+
+/* Tags en bas */
+.divin-card__tags {
+  width: 100%;
+  font-size: 8px;
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  padding: 4px 6px;
+  background: rgba(0,0,0,0.25);
+  margin-top: auto;
+}
+
+/* ── Peek bottom ── */
+.dialog--peek-bottom { max-width: 400px; }
+
+.peek-bottom-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 24px 20px;
+  background: linear-gradient(135deg, var(--color-purple-accent), var(--color-pink));
+  border-radius: 20px;
+  border: 2px solid var(--color-gold);
+  margin: 16px 0;
+  min-height: 160px;
+  justify-content: center;
+}
+.peek-bottom-card--danger {
+  background: linear-gradient(135deg, #7f1d1d, #991b1b) !important;
+  border-color: #ef4444 !important;
+  animation: dangerPulse 1s ease-in-out infinite;
+}
+@keyframes dangerPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(239,68,68,0); }
+}
+.peek-bottom-card__emoji { font-size: 48px; line-height: 1; }
+.peek-bottom-card__name { font-family: var(--font-display); font-size: 16px; font-weight: 900; color: #fff; text-align: center; }
+.peek-bottom-card__desc { font-size: 12px; color: rgba(255,255,255,0.75); text-align: center; font-style: italic; }
+.peek-bottom-card__tags { font-size: 10px; color: rgba(255,255,255,0.55); }
+
+.peek-bottom-actions { display: flex; gap: 12px; justify-content: center; margin-top: 4px; }
+.peek-bottom-note { text-align: center; font-size: 11px; color: var(--color-white-muted); font-style: italic; margin-top: 8px; }
+
